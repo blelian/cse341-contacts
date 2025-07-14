@@ -1,5 +1,7 @@
-// Load environment variables
-require('dotenv').config();
+// Load environment variables (only in non-production)
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
 
 const express = require('express');
 const app = express();
@@ -26,6 +28,7 @@ app.get('/', (req, res) => {
 });
 
 // Start the server after DB connects
+// Ensures Render uses its environment variable and not a committed .env
 db.connectToDb(() => {
     app.listen(port, () => {
         console.log(`🚀 Server running at http://localhost:${port}`);
