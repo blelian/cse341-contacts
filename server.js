@@ -1,40 +1,34 @@
-// Load environment variables first
+// Load environment variables
 require('dotenv').config();
 
 const express = require('express');
-const mongoose = require('mongoose');
-
 const app = express();
-const PORT = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGODB_URI;
 
-// Middleware to parse JSON
+const swaggerUi = require('swagger-ui-express');
+const swaggerFile = require('./swagger.json');
+
+const contactRoutes = require('./routes/contact');  // ✅ renamed variable for clarity
+const db = require('./database/connection');
+
+const port = process.env.PORT || 3000;
+
 app.use(express.json());
 
-// Validate MONGODB_URI
-if (!MONGODB_URI) {
-    console.error("❌ MONGODB_URI not found in .env file");
-    process.exit(1);
-}
+// Serve Swagger API docs
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
-// Connect to MongoDB
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
-    .then(() => console.log('✅ MongoDB connected'))
-    .catch(err => {
-        console.error("❌ MongoDB connection error:", err);
-        process.exit(1); // Stop the server if DB fails
-    });
+// Route group for contact endpoints
+app.use('/api/contacts', contactRoutes); // matches Swagger prefix /api/contacts
 
-// Define routes
-const contacts = require('./routes/contacts');
-app.use('/api/contacts', contacts);
-
-// Basic test route
+// Optional base route
 app.get('/', (req, res) => {
-    res.send('Hello World');
+    res.send('Welcome to my Contact API');
 });
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`🚀 Server is running on port ${PORT}`);
+// Start the server after DB connects
+db.connectToDb(() => {
+    app.listen(port, () => {
+        console.log(`🚀 Server running at http://localhost:${port}`);
+        console.log(`📘 API docs at http://localhost:${port}/api-docs`);
+    });
 });

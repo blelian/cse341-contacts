@@ -1,0 +1,32 @@
+### Get All Contacts
+GET http://localhost:3000/api/contacts
+
+### Get Contact by ID
+GET http://localhost:3000/api/contacts/<replace_with_id>
+
+### Create New Contact
+POST http://localhost:3000/api/contacts
+Content-Type: application/json
+
+{
+    "firstName": "Alice",
+    "lastName": "Smith",
+    "email": "alice@gmail.com",
+    "favoriteColor": "Blue",
+    "birthday": "1992-04-25"
+}
+
+### Update Contact
+PUT http://localhost:3000/api/contacts/<replace_with_id>
+Content-Type: application/json
+
+{
+    "firstName": "Alice",
+    "lastName": "Johnson",
+    "email": "alice.johnson@gmail.com",
+    "favoriteColor": "Green",
+    "birthday": "1992-04-25"
+}
+
+### Delete Contact
+DELETE http://localhost:3000/api/contacts/<replace_with_id>
