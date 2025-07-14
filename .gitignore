@@ -8,9 +8,6 @@ package-lock.json
 # Environment Variables
 .env
 
-# Swagger Auto-generated Files (Optional, if you don't want to commit swagger.json)
-swagger.json
-
 # VSCode
 .vscode/
 
