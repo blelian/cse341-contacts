@@ -3,26 +3,19 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
-const { MongoClient } = require('mongodb');
+const mongoose = require('mongoose');
 
-// Use MONGODB_URI set in environment (Render) or .env (locally)
-const uri = process.env.MONGODB_URI;
-
-let db;
-
-const connectToDb = (callback) => {
-  MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(client => {
-      // client.db() picks the database from the URI
-      db = client.db();
-      console.log('✅ Connected to MongoDB');
-      callback();
-    })
-    .catch(err => {
-      console.error('❌ Failed to connect to MongoDB:', err);
+const connectToDb = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
     });
+    console.log('✅ Connected to MongoDB with Mongoose');
+  } catch (err) {
+    console.error('❌ Failed to connect to MongoDB:', err);
+    process.exit(1);
+  }
 };
 
-const getDb = () => db;
-
-module.exports = { connectToDb, getDb };
+module.exports = { connectToDb };
