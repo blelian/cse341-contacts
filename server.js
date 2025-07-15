@@ -1,4 +1,4 @@
-// Load environment variables unconditionally, as the very first thing
+// Load environment variables unconditionally, as the very first thing 
 require('dotenv').config();
 
 console.log('MONGO_URI:', process.env.MONGO_URI);
@@ -19,9 +19,8 @@ app.use(express.json());
 // Swagger docs route
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
-// Contacts API routes
-app.use('/contacts', contactRoutes);
-
+// Contacts API routes (Fixed base path to match Swagger and Render URL)
+app.use('/api/contacts', contactRoutes);
 
 // Default route
 app.get('/', (req, res) => {

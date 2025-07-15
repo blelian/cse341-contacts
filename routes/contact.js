@@ -64,6 +64,7 @@ router.get('/:id', controller.getById);
  *                 type: string
  *               birthday:
  *                 type: string
+ *                 format: date
  *     responses:
  *       201:
  *         description: Contact created
@@ -108,6 +109,7 @@ router.post('/', controller.create);
  *                 type: string
  *               birthday:
  *                 type: string
+ *                 format: date
  *     responses:
  *       204:
  *         description: Contact updated successfully
