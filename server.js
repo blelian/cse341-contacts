@@ -22,6 +22,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 // Contacts API routes
 app.use('/contacts', contactRoutes);
 
+
 // Default route
 app.get('/', (req, res) => {
   res.send('Welcome to the Contacts API');
