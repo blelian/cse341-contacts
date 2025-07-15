@@ -3,7 +3,7 @@ const Contact = require('../models/contact');
 // GET all contacts
 const getAll = async (req, res) => {
   try {
-    const contacts = await Contact.find();  // Mongoose method to get all documents
+    const contacts = await Contact.find(); // Mongoose method to get all documents
     res.status(200).json(contacts);
   } catch (error) {
     res.status(500).json({ message: 'Error retrieving contacts', error: error.message });
@@ -59,6 +59,7 @@ const update = async (req, res) => {
     if (!updatedContact) {
       return res.status(404).json({ message: 'Contact not found' });
     }
+
     res.status(204).send(); // No content
   } catch (error) {
     res.status(400).json({ message: 'Invalid contact ID', error: error.message });
@@ -73,6 +74,7 @@ const remove = async (req, res) => {
     if (!deletedContact) {
       return res.status(404).json({ message: 'Contact not found' });
     }
+
     res.status(204).send(); // No content
   } catch (error) {
     res.status(400).json({ message: 'Invalid contact ID', error: error.message });
