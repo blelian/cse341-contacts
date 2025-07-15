@@ -3,7 +3,7 @@ const Contact = require('../models/contact');
 // GET all contacts
 const getAll = async (req, res) => {
   try {
-    const contacts = await Contact.getAllContacts();
+    const contacts = await Contact.find();  // Mongoose method to get all documents
     res.status(200).json(contacts);
   } catch (error) {
     res.status(500).json({ message: 'Error retrieving contacts', error: error.message });
@@ -13,7 +13,7 @@ const getAll = async (req, res) => {
 // GET contact by ID
 const getById = async (req, res) => {
   try {
-    const contact = await Contact.getContactById(req.params.id);
+    const contact = await Contact.findById(req.params.id); // Mongoose findById
     if (!contact) {
       return res.status(404).json({ message: 'Contact not found' });
     }
@@ -33,8 +33,9 @@ const create = async (req, res) => {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    const result = await Contact.createContact(req.body);
-    res.status(201).json({ id: result.insertedId });
+    const newContact = new Contact(req.body);
+    const savedContact = await newContact.save(); // Mongoose save()
+    res.status(201).json({ id: savedContact._id });
   } catch (error) {
     res.status(500).json({ message: 'Error creating contact', error: error.message });
   }
@@ -50,11 +51,15 @@ const update = async (req, res) => {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    const result = await Contact.updateContact(req.params.id, req.body);
-    if (result.modifiedCount === 0) {
-      return res.status(404).json({ message: 'Contact not found or no changes made' });
+    const updatedContact = await Contact.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true
+    });
+
+    if (!updatedContact) {
+      return res.status(404).json({ message: 'Contact not found' });
     }
-    res.status(204).send();
+    res.status(204).send(); // No content
   } catch (error) {
     res.status(400).json({ message: 'Invalid contact ID', error: error.message });
   }
@@ -63,11 +68,12 @@ const update = async (req, res) => {
 // DELETE contact by ID
 const remove = async (req, res) => {
   try {
-    const result = await Contact.deleteContact(req.params.id);
-    if (result.deletedCount === 0) {
+    const deletedContact = await Contact.findByIdAndDelete(req.params.id);
+
+    if (!deletedContact) {
       return res.status(404).json({ message: 'Contact not found' });
     }
-    res.status(204).send();
+    res.status(204).send(); // No content
   } catch (error) {
     res.status(400).json({ message: 'Invalid contact ID', error: error.message });
   }
