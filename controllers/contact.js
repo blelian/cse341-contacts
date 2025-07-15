@@ -3,7 +3,7 @@ const Contact = require('../models/contact');
 // GET all contacts
 const getAll = async (req, res) => {
   try {
-    const contacts = await Contact.find(); // Mongoose method to get all documents
+    const contacts = await Contact.find();
     res.status(200).json(contacts);
   } catch (error) {
     res.status(500).json({ message: 'Error retrieving contacts', error: error.message });
@@ -13,7 +13,7 @@ const getAll = async (req, res) => {
 // GET contact by ID
 const getById = async (req, res) => {
   try {
-    const contact = await Contact.findById(req.params.id); // Mongoose findById
+    const contact = await Contact.findById(req.params.id);
     if (!contact) {
       return res.status(404).json({ message: 'Contact not found' });
     }
@@ -28,13 +28,12 @@ const create = async (req, res) => {
   try {
     const { firstName, lastName, email, favoriteColor, birthday } = req.body;
 
-    // Basic validation
     if (!firstName || !lastName || !email || !favoriteColor || !birthday) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
     const newContact = new Contact(req.body);
-    const savedContact = await newContact.save(); // Mongoose save()
+    const savedContact = await newContact.save();
     res.status(201).json({ id: savedContact._id });
   } catch (error) {
     res.status(500).json({ message: 'Error creating contact', error: error.message });
@@ -46,21 +45,20 @@ const update = async (req, res) => {
   try {
     const { firstName, lastName, email, favoriteColor, birthday } = req.body;
 
-    // Basic validation
     if (!firstName || !lastName || !email || !favoriteColor || !birthday) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
     const updatedContact = await Contact.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
-      runValidators: true
+      runValidators: true,
     });
 
     if (!updatedContact) {
       return res.status(404).json({ message: 'Contact not found' });
     }
 
-    res.status(204).send(); // No content
+    res.status(204).send(); // No content on successful update
   } catch (error) {
     res.status(400).json({ message: 'Invalid contact ID', error: error.message });
   }
@@ -75,7 +73,7 @@ const remove = async (req, res) => {
       return res.status(404).json({ message: 'Contact not found' });
     }
 
-    res.status(204).send(); // No content
+    res.status(204).send(); // No content on successful delete
   } catch (error) {
     res.status(400).json({ message: 'Invalid contact ID', error: error.message });
   }
@@ -86,5 +84,5 @@ module.exports = {
   getById,
   create,
   update,
-  remove
+  remove,
 };

@@ -132,8 +132,8 @@ router.put('/:id', controller.update);
  *           type: string
  *         description: The ID of the contact to delete
  *     responses:
- *       200:
- *         description: Contact deleted
+ *       204:
+ *         description: Contact deleted successfully
  *       404:
  *         description: Contact not found
  */
