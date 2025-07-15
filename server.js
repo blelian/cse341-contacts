@@ -23,7 +23,7 @@ app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 // Contacts routes
-app.use('/api/contacts', contactRoutes);
+app.use('/contacts', contactRoutes); // 👈 now matches .rest file
 
 // Root
 app.get('/', (req, res) => {
