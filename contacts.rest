@@ -1,32 +1,169 @@
-### Get All Contacts
-GET http://localhost:3000/api/contacts
-
-### Get Contact by ID
-GET http://localhost:3000/api/contacts/<replace_with_id>
-
-### Create New Contact
-POST http://localhost:3000/api/contacts
-Content-Type: application/json
-
 {
-    "firstName": "Alice",
-    "lastName": "Smith",
-    "email": "alice@gmail.com",
-    "favoriteColor": "Blue",
-    "birthday": "1992-04-25"
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Contacts API",
+    "description": "API for managing contacts",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://your-render-url/api"
+    },
+    {
+      "url": "http://localhost:3000/api"
+    }
+  ],
+  "paths": {
+    "/contacts": {
+      "get": {
+        "summary": "Get All Contacts",
+        "description": "Retrieve a list of all contacts",
+        "responses": {
+          "200": {
+            "description": "A list of contacts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Contact" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create New Contact",
+        "description": "Create a new contact with all required fields",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Contact" },
+              "example": {
+                "firstName": "Alice",
+                "lastName": "Smith",
+                "email": "alice@gmail.com",
+                "favoriteColor": "Blue",
+                "birthday": "1992-04-25"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Contact created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "60c72b2f4f1a256e8c8f1234"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/contacts/{id}": {
+      "get": {
+        "summary": "Get Contact by ID",
+        "description": "Retrieve a contact by its ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Contact ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contact found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Contact" }
+              }
+            }
+          },
+          "404": {
+            "description": "Contact not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update Contact",
+        "description": "Update an existing contact by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Contact ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Contact" },
+              "example": {
+                "firstName": "Alice",
+                "lastName": "Johnson",
+                "email": "alice.johnson@gmail.com",
+                "favoriteColor": "Green",
+                "birthday": "1992-04-25"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Contact updated successfully" },
+          "404": { "description": "Contact not found" }
+        }
+      },
+      "delete": {
+        "summary": "Delete Contact",
+        "description": "Delete a contact by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Contact ID"
+          }
+        ],
+        "responses": {
+          "204": { "description": "Contact deleted successfully" },
+          "404": { "description": "Contact not found" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Contact": {
+        "type": "object",
+        "required": ["firstName", "lastName", "email", "favoriteColor", "birthday"],
+        "properties": {
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "email": { "type": "string", "format": "email" },
+          "favoriteColor": { "type": "string" },
+          "birthday": { "type": "string", "format": "date" }
+        }
+      }
+    }
+  }
 }
-
-### Update Contact
-PUT http://localhost:3000/api/contacts/<replace_with_id>
-Content-Type: application/json
-
-{
-    "firstName": "Alice",
-    "lastName": "Johnson",
-    "email": "alice.johnson@gmail.com",
-    "favoriteColor": "Green",
-    "birthday": "1992-04-25"
-}
-
-### Delete Contact
-DELETE http://localhost:3000/api/contacts/<replace_with_id>
