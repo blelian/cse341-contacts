@@ -1,25 +1,25 @@
-// Load environment variables (only in non-production)
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
-}
+// Load environment variables unconditionally, as the very first thing
+require('dotenv').config();
+
+console.log('MONGO_URI:', process.env.MONGO_URI);
+console.log('MONGODB_URI:', process.env.MONGODB_URI);
 
 const express = require('express');
-const app = express();
-
+const mongoose = require('mongoose');
 const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./swagger.json');
-
 const contactRoutes = require('./routes/contact');
-const db = require('./database/connection');
 
+const app = express();
 const port = process.env.PORT || 3000;
 
+// Middleware
 app.use(express.json());
 
-// Serve Swagger documentation
+// Swagger docs route
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
-// Use contacts API routes
+// Contacts API routes
 app.use('/contacts', contactRoutes);
 
 // Default route
@@ -27,7 +27,24 @@ app.get('/', (req, res) => {
   res.send('Welcome to the Contacts API');
 });
 
-// ✅ Make sure the server listens
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+// Use the correct env variable name here
+const mongoUri = process.env.MONGODB_URI;
+
+if (!mongoUri) {
+  console.error('Error: MONGODB_URI environment variable is not set.');
+  process.exit(1);
+}
+
+// Connect to MongoDB then start the server
+mongoose.connect(mongoUri)
+  .then(() => {
+    console.log('MongoDB connected successfully.');
+
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Failed to connect to MongoDB:', err);
+    process.exit(1);
+  });
