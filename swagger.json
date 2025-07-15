@@ -2,25 +2,25 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Contacts API",
-    "description": "API for managing contacts",
+    "description": "A simple API for managing contacts with MongoDB",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "https://your-render-url/api"
+      "url": "https://cse341-contacts-3-j7ui.onrender.com"
     },
     {
-      "url": "http://localhost:3000/api"
+      "url": "http://localhost:3000"
     }
   ],
   "paths": {
     "/contacts": {
       "get": {
         "summary": "Get All Contacts",
-        "description": "Retrieve a list of all contacts",
+        "description": "Retrieve a list of all contacts.",
         "responses": {
           "200": {
-            "description": "A list of contacts",
+            "description": "A list of contacts.",
             "content": {
               "application/json": {
                 "schema": {
@@ -34,7 +34,7 @@
       },
       "post": {
         "summary": "Create New Contact",
-        "description": "Create a new contact with all required fields",
+        "description": "Create a new contact with all required fields.",
         "requestBody": {
           "required": true,
           "content": {
@@ -52,7 +52,7 @@
         },
         "responses": {
           "201": {
-            "description": "Contact created successfully",
+            "description": "Contact created successfully.",
             "content": {
               "application/json": {
                 "schema": {
@@ -68,7 +68,7 @@
             }
           },
           "400": {
-            "description": "Invalid input"
+            "description": "Invalid input or missing fields."
           }
         }
       }
@@ -76,19 +76,19 @@
     "/contacts/{id}": {
       "get": {
         "summary": "Get Contact by ID",
-        "description": "Retrieve a contact by its ID",
+        "description": "Retrieve a specific contact by its ID.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
             "schema": { "type": "string" },
-            "description": "Contact ID"
+            "description": "MongoDB contact ID"
           }
         ],
         "responses": {
           "200": {
-            "description": "Contact found",
+            "description": "Contact found.",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/Contact" }
@@ -96,20 +96,20 @@
             }
           },
           "404": {
-            "description": "Contact not found"
+            "description": "Contact not found."
           }
         }
       },
       "put": {
         "summary": "Update Contact",
-        "description": "Update an existing contact by ID",
+        "description": "Update an existing contact by ID.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
             "schema": { "type": "string" },
-            "description": "Contact ID"
+            "description": "MongoDB contact ID"
           }
         ],
         "requestBody": {
@@ -128,25 +128,33 @@
           }
         },
         "responses": {
-          "200": { "description": "Contact updated successfully" },
-          "404": { "description": "Contact not found" }
+          "200": {
+            "description": "Contact updated successfully."
+          },
+          "404": {
+            "description": "Contact not found."
+          }
         }
       },
       "delete": {
         "summary": "Delete Contact",
-        "description": "Delete a contact by ID",
+        "description": "Delete a contact by ID.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
             "schema": { "type": "string" },
-            "description": "Contact ID"
+            "description": "MongoDB contact ID"
           }
         ],
         "responses": {
-          "204": { "description": "Contact deleted successfully" },
-          "404": { "description": "Contact not found" }
+          "204": {
+            "description": "Contact deleted successfully."
+          },
+          "404": {
+            "description": "Contact not found."
+          }
         }
       }
     }
@@ -157,11 +165,11 @@
         "type": "object",
         "required": ["firstName", "lastName", "email", "favoriteColor", "birthday"],
         "properties": {
-          "firstName": { "type": "string" },
-          "lastName": { "type": "string" },
-          "email": { "type": "string", "format": "email" },
-          "favoriteColor": { "type": "string" },
-          "birthday": { "type": "string", "format": "date" }
+          "firstName": { "type": "string", "example": "Alice" },
+          "lastName": { "type": "string", "example": "Smith" },
+          "email": { "type": "string", "format": "email", "example": "alice@gmail.com" },
+          "favoriteColor": { "type": "string", "example": "Blue" },
+          "birthday": { "type": "string", "format": "date", "example": "1992-04-25" }
         }
       }
     }

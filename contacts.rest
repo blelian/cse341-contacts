@@ -1,11 +1,11 @@
 ### Get All Contacts
-GET http://localhost:3000/api/contacts
+GET http://localhost:3000/contacts
 
 ### Get Contact by ID
-GET http://localhost:3000/api/contacts/<replace_with_id>
+GET http://localhost:3000/contacts/<replace_with_id>
 
 ### Create New Contact
-POST http://localhost:3000/api/contacts
+POST http://localhost:3000/contacts
 Content-Type: application/json
 
 {
@@ -17,7 +17,7 @@ Content-Type: application/json
 }
 
 ### Update Contact
-PUT http://localhost:3000/api/contacts/<replace_with_id>
+PUT http://localhost:3000/contacts/<replace_with_id>
 Content-Type: application/json
 
 {
@@ -29,4 +29,4 @@ Content-Type: application/json
 }
 
 ### Delete Contact
-DELETE http://localhost:3000/api/contacts/<replace_with_id>
+DELETE http://localhost:3000/contacts/<replace_with_id>
