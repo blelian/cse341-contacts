@@ -1,6 +1,6 @@
 // Load environment variables (only in non-production)
 if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
+  require('dotenv').config();
 }
 
 const express = require('express');
@@ -9,29 +9,25 @@ const app = express();
 const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./swagger.json');
 
-const contactRoutes = require('./routes/contact');  // ✅ renamed variable for clarity
+const contactRoutes = require('./routes/contact');
 const db = require('./database/connection');
 
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
-// Serve Swagger API docs
+// Serve Swagger documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
-// Route group for contact endpoints
-app.use('/api/contacts', contactRoutes); // matches Swagger prefix /api/contacts
+// Use contacts API routes
+app.use('/contacts', contactRoutes);
 
-// Optional base route
+// Default route
 app.get('/', (req, res) => {
-    res.send('Welcome to my Contact API');
+  res.send('Welcome to the Contacts API');
 });
 
-// Start the server after DB connects
-// Ensures Render uses its environment variable and not a committed .env
-db.connectToDb(() => {
-    app.listen(port, () => {
-        console.log(`🚀 Server running at http://localhost:${port}`);
-        console.log(`📘 API docs at http://localhost:${port}/api-docs`);
-    });
+// ✅ Make sure the server listens
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
